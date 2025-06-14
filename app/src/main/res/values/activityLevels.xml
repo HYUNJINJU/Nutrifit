@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/values/arrays.xml -->
+<resources>
+    <string-array name="activityLevels">
+        <item>매우 활동적</item>
+        <item>활동적</item>
+        <item>보통 활동적</item>
+        <item>적게 활동적</item>
+        <item>거의 활동하지 않음</item>
+    </string-array>
+</resources>

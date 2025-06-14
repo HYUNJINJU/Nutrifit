@@ -85,5 +85,6 @@
         android:layout_marginBottom="90dp"
         android:contentDescription="카메라"
         android:src="@android:drawable/ic_menu_camera"
+        app:backgroundTint="@android:color/black"
         app:fabSize="normal" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

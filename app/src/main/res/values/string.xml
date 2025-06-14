@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Nutrifit</string>
+    <string name="foodlens_app_token">e0f07872cf8a4dd6b47590e7529a5e5a</string>
+    <string name="foodlens_company_token">08132abe6c3f4a3cb113bf6a3bcb254c</string>
+</resources>

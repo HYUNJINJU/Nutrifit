@@ -55,6 +55,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="카메라로 촬영하기"
+            android:background="@drawable/rounded_button_black"
+            android:textColor="@android:color/white"
             android:layout_marginBottom="12dp" />
 
         <!-- 갤러리 버튼 -->
@@ -63,6 +65,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="갤러리에서 가져오기"
+            android:background="@drawable/rounded_button_black"
+            android:textColor="@android:color/white"
             android:layout_marginBottom="12dp" />
     </LinearLayout>
 
@@ -78,5 +82,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="전송"
+        android:background="@drawable/rounded_button_black"
+        android:textColor="@android:color/white"
         android:layout_marginBottom="16dp" />
 </LinearLayout>
