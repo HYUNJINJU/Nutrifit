@@ -39,7 +39,7 @@ import java.util.*;
 
 public class CameraActivity extends AppCompatActivity {
 
-    private Button cameraButton, galleryButton, sendButton;
+    private Button cameraButton, galleryButton, sendButton, userInputButton;
     private ImageView imageView;
 
     private ActivityResultLauncher<String> permissionLauncher;
@@ -49,6 +49,7 @@ public class CameraActivity extends AppCompatActivity {
     private byte[] imageByteData;
     private Uri imageUri;
     private static final String TAG_E = "ERROR";
+    private String selectedMealType = "아침";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +61,7 @@ public class CameraActivity extends AppCompatActivity {
         galleryButton = findViewById(R.id.galleryButton);
         sendButton = findViewById(R.id.sendButton);
         sendButton.setEnabled(false);
+        userInputButton = findViewById(R.id.userInputButton);
         TextView placeholderText = findViewById(R.id.placeholderText);
         placeholderText.setVisibility(View.VISIBLE);
 
@@ -89,12 +91,25 @@ public class CameraActivity extends AppCompatActivity {
         );
 
         cameraButton.setOnClickListener(v -> {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED)
-                openCamera();
-            else permissionLauncher.launch(Manifest.permission.CAMERA);
+            showMealTypeDialog(() -> {
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED)
+                    openCamera();
+                else permissionLauncher.launch(Manifest.permission.CAMERA);
+            });
         });
 
-        galleryButton.setOnClickListener(v -> galleryLauncher.launch("image/*"));
+        galleryButton.setOnClickListener(v -> {
+            showMealTypeDialog(() -> galleryLauncher.launch("image/*"));
+        });
+
+        //유저 수동입력 버튼
+        userInputButton.setOnClickListener(v -> {
+            showMealTypeDialog(() -> {
+                Intent intent = new Intent(CameraActivity.this, UserFoodSelectActivity.class);
+                intent.putExtra("mealType", selectedMealType);
+                startActivity(intent);
+            });
+        });
 
         sendButton.setOnClickListener(v -> {
             if (imageByteData != null) {
@@ -103,6 +118,20 @@ public class CameraActivity extends AppCompatActivity {
                 Toast.makeText(this, "사진이 선택되지 않았습니다.", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    // 팝업창으로 아점저 선택
+    private void showMealTypeDialog(Runnable onSelected) {
+        String[] mealTypes = {"아침", "점심", "저녁"};
+
+        new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle("식사 종류를 선택하세요")
+                .setItems(mealTypes, (dialog, which) -> {
+                    selectedMealType = mealTypes[which];
+                    onSelected.run();
+                })
+                .setCancelable(false)
+                .show();
     }
 
     private void openCamera() {
@@ -167,6 +196,7 @@ public class CameraActivity extends AppCompatActivity {
                     intent.putExtra("result_json", resultJson);
                     intent.putExtra("image_uri", imageUri.toString());
                     intent.putExtra("food_file_name", foodFile.getName()); // 파일명 전달
+                    intent.putExtra("mealType", selectedMealType);
                     startActivity(intent);
                 }
             }

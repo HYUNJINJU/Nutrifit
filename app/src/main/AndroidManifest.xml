@@ -48,6 +48,12 @@
         <activity
             android:name="com.nutrifit_n.UserInformActivity"
             android:exported="false" />
+        <activity
+            android:name="com.nutrifit_n.UserFoodSelectActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UserFoodCalculate"
+            android:exported="false" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
