@@ -33,25 +33,7 @@ FoodLens를 활용하여 음식 이미지를 인식하고, Harris-Benedict 식�
 
 ## **프로젝트 구조**
 
-Nutrifit/
-│
-├── backend/
-│   ├── app.py (Flask 서버)
-│   ├── recommendation.py (추천 알고리즘)
-│   └── data/ (식품 영양성분 CSV)
-│
-├── android/
-│   └── Nutrifit App (Android 프로젝트)
-│
-├── data/
-│   ├── user_profile.json (사용자 정보)
-│   └── intake_history.json (섭취 기록)
-│
-├── docs/
-│   ├── ERD.png
-│   └── 시스템 아키텍처.png
-│
-└── README.md
+![Image](https://github.com/user-attachments/assets/b44f8e28-631a-4bba-82bf-8e296503cd3b)
 ---
 
 ## 핵심 알고리즘
