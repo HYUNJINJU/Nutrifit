@@ -35,21 +35,22 @@ FoodLens를 활용하여 음식 이미지를 인식하고, Harris-Benedict 식�
 
 ## **프로젝트 구조**
 
+```
 Nutrifit/
 ├── android/
-│ ├── src/
-│ │ ├── main/
-│ │ │ ├── java/ # Java class
-│ │ │ └── res/ # Layout, FoodLens Token, ..
-│ └── build.gradle
-├── backend/ # Flask 백엔드 서버 코드
-│ ├── server.py
-│ └── data/ # 식품 영양성분 CSV 데이터, 앱에서 POST 요청으로 전송받은 user_data, food_data
-├── data/ 
-│ ├── user_data.json
-│ └── food_data_*.json
+│   ├── src/
+│   │   └── main/
+│   │       ├── java/        # Java class
+│   │       └── res/         # Layout, FoodLens Token, ...
+│   └── build.gradle
+├── backend/                # Flask 백엔드 서버 코드
+│   ├── server.py
+│   └── data/               # 식품 영양성분 CSV 데이터, 앱에서 POST 요청으로 전송받은 user_data, food_data
+│       ├── user_data.json
+│       └── food_data_*.json
 ├── README.md
 └── .gitignore
+```
 
 ---
 
