@@ -1,4 +1,4 @@
-package com.nutrifit_n;
+package com.nutrifit;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -31,11 +31,9 @@ import okhttp3.Response;
 
 public class RecommendFragment extends Fragment {
     private final String SERVER_URL = "http://43.203.201.216:5000/recommend";
-
     private View rootView;
 
-    public RecommendFragment() {
-    }
+    public RecommendFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,18 +47,16 @@ public class RecommendFragment extends Fragment {
     }
 
     private void handleLikeButton(View button) {
-        button.setAlpha(0.5f);  // 50% 투명도
+        button.setAlpha(0.5f);
         if (button instanceof android.widget.Button) {
             ((android.widget.Button) button).setText("좋아요 완료!");
         }
-        button.setEnabled(false); // 중복 클릭 방지
+        button.setEnabled(false);
     }
 
     private void sendRecommendationRequest() {
         try {
             File userFile = new File(requireContext().getFilesDir(), "user_data.json");
-
-            // 오늘 날짜의 food_data 파일 찾기
             String today = new SimpleDateFormat("yyyyMMdd").format(new Date());
             File[] files = requireContext().getFilesDir().listFiles((dir, name) -> name.startsWith("food_data_" + today));
             if (files == null || files.length == 0) {
@@ -70,17 +66,14 @@ public class RecommendFragment extends Fragment {
 
             File foodFile = files[0];
 
-            // JSON 파싱
             Gson gson = new Gson();
             JsonObject userJson = gson.fromJson(new InputStreamReader(new FileInputStream(userFile)), JsonObject.class);
             JsonArray foodArray = gson.fromJson(new InputStreamReader(new FileInputStream(foodFile)), JsonArray.class);
 
-            // 병합 JSON
             JsonObject merged = new JsonObject();
             merged.add("user", userJson.get("user"));
             merged.add("foods", foodArray);
 
-            // HTTP 요청
             OkHttpClient client = new OkHttpClient();
             RequestBody body = RequestBody.create(
                     merged.toString(),
@@ -124,47 +117,51 @@ public class RecommendFragment extends Fragment {
         try {
             JsonArray resultArray = JsonParser.parseString(resultJson).getAsJsonArray();
 
-            if (resultArray.size() < 2) {
+            if (resultArray.size() < 10) {
                 Toast.makeText(getContext(), "추천 결과가 부족합니다.", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            String rice = "";
-            String soup = "";
-            StringBuilder sideDishBuilder = new StringBuilder();
+            // 식단 1
+            String rice1 = getFoodName(resultArray, 0);
+            String soup1 = getFoodName(resultArray, 2);
+            String sideDish1 = joinSideDishes(resultArray, 4, 6, 8);
 
-            if (resultArray.size() == 4) {
-                rice = resultArray.get(0).getAsJsonObject().get("대표식품명").getAsString();
-                for (int i = 1; i < 4; i++) {
-                    JsonObject dishObj = resultArray.get(i).getAsJsonObject();
-                    sideDishBuilder.append(dishObj.get("대표식품명").getAsString());
-                    if (i < 3) sideDishBuilder.append(", ");
-                }
-            } else {
-                JsonObject riceObj = resultArray.get(0).getAsJsonObject();
-                JsonObject soupObj = resultArray.get(1).getAsJsonObject();
+            // 식단 2
+            String rice2 = getFoodName(resultArray, 1);
+            String soup2 = getFoodName(resultArray, 3);
+            String sideDish2 = joinSideDishes(resultArray, 5, 7, 9);
 
-                rice = riceObj.get("대표식품명").getAsString();
-                soup = soupObj.get("대표식품명").getAsString();
+            ((TextView) rootView.findViewById(R.id.rice1)).setText(rice1.isEmpty() ? "" : "밥: " + rice1);
+            ((TextView) rootView.findViewById(R.id.soup1)).setText(soup1.isEmpty() ? "" : "국: " + soup1);
+            ((TextView) rootView.findViewById(R.id.sideDish1)).setText(sideDish1.isEmpty() ? "" : "반찬: " + sideDish1);
 
-                for (int i = 2; i < resultArray.size(); i++) {
-                    JsonObject dishObj = resultArray.get(i).getAsJsonObject();
-                    sideDishBuilder.append(dishObj.get("대표식품명").getAsString());
-                    if (i < resultArray.size() - 1) sideDishBuilder.append(", ");
-                }
-            }
-
-            ((TextView) rootView.findViewById(R.id.rice1)).setText("밥: " + rice);
-            ((TextView) rootView.findViewById(R.id.soup1)).setText(soup.isEmpty() ? "" : "국: " + soup);
-            ((TextView) rootView.findViewById(R.id.sideDish1)).setText("반찬: " + sideDishBuilder);
-
-            ((TextView) rootView.findViewById(R.id.rice2)).setText("밥: " + rice);
-            ((TextView) rootView.findViewById(R.id.soup2)).setText(soup.isEmpty() ? "" : "국: " + soup);
-            ((TextView) rootView.findViewById(R.id.sideDish2)).setText("반찬: " + sideDishBuilder);
+            ((TextView) rootView.findViewById(R.id.rice2)).setText(rice2.isEmpty() ? "" : "밥: " + rice2);
+            ((TextView) rootView.findViewById(R.id.soup2)).setText(soup2.isEmpty() ? "" : "국: " + soup2);
+            ((TextView) rootView.findViewById(R.id.sideDish2)).setText(sideDish2.isEmpty() ? "" : "반찬: " + sideDish2);
 
         } catch (Exception e) {
             Toast.makeText(getContext(), "추천 데이터 파싱 오류: " + e.getMessage(), Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
     }
+
+    private String getFoodName(JsonArray array, int index) {
+        if (index >= array.size()) return "";
+        String name = array.get(index).getAsJsonObject().get("대표식품명").getAsString();
+        return "추천 없음".equals(name) ? "" : name;
+    }
+
+    private String joinSideDishes(JsonArray array, int i1, int i2, int i3) {
+        String[] names = {getFoodName(array, i1), getFoodName(array, i2), getFoodName(array, i3)};
+        StringBuilder result = new StringBuilder();
+        for (String name : names) {
+            if (!name.isEmpty()) {
+                if (result.length() > 0) result.append(", ");
+                result.append(name);
+            }
+        }
+        return result.toString();
+    }
+
 }

@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "com.nutrifit_n"
+    namespace = "com.nutrifit"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.nutrifit_n"
+        applicationId = "com.nutrifit"
         minSdk = 23
         targetSdk = 34
         versionCode = 1

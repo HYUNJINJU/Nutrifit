@@ -1,4 +1,4 @@
-package com.nutrifit_n;
+package com.nutrifit;
 
 import android.content.Context;
 import android.graphics.Canvas;

@@ -1,4 +1,4 @@
-package com.nutrifit_n;
+package com.nutrifit;
 
 public class UserFoodItem {
     public String foodName, mealType;
